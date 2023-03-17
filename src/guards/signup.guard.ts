@@ -6,6 +6,7 @@ import { Request } from "express"
 import { ExceptionService } from "@/services/exception.service"
 
 class SignupDTO {
+    @Matches(/@gmail\.com$/, { message: "Email domain is invalid" })
     @IsEmail({}, { message: "Login is invalid email" })
     @IsString({ message: "Login must be a string" })
     @IsNotEmpty({ message: "Login is required" })
