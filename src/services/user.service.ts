@@ -12,6 +12,12 @@ export class PromoteDTO {
 	@IsNotEmpty({ message: "User id is required" })
 	id: string
 }
+export class IdDTO {
+	@IsMongoId({ message: "User id format is invalid" })
+	@IsString({ message: "User id must be a string" })
+	@IsNotEmpty({ message: "User id is required" })
+	id: string
+}
 
 @Injectable()
 export class UserService {
@@ -24,8 +30,8 @@ export class UserService {
 			role: req.user.role
 		}})
 	}
-	async id(req: Request, res: Response) {
-		const user = await this.userModel.findOne({ _id: req.params.id })
+	async id(req: Request, res: Response, params: IdDTO) {
+		const user = await this.userModel.findOne({ _id: params.id })
 
 		if(user) {
 			return res.status(200).send({ status: 200, message: "There is information about user", user: {
