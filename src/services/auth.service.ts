@@ -7,14 +7,29 @@ import * as argon from "argon2"
 
 import { IUserModel } from "@/models/user.model"
 
+export class SignupDTO {
+    login: string
+    password: string
+    name: string
+    surname: string
+    fathername: string
+	department: string
+	job: string
+}
+
 @Injectable()
 export class AuthService {
 	constructor(@InjectModel("USER") private userModel: IUserModel, private readonly config: ConfigService) {}
 
-	async signup(req: Request, res: Response) {
+	async signup(req: Request, res: Response, body: SignupDTO) {
 		await this.userModel.create({
 			login: req.user.login,
-			password: await argon.hash(req.user.password)
+			password: await argon.hash(req.user.password),
+			name: body.name,
+			surname: body.surname,
+			fathername: body.fathername,
+			department: body.department,
+			job: body.job
 		})
 
 		return res.status(201).send({ status: 201, message: "User successfully created" })
