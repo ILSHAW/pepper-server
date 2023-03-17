@@ -6,6 +6,7 @@ import { AccessGuard } from "@/guards/access.guard"
 import { SignupGuard } from "@/guards/signup.guard"
 import { Role } from "@/decorators/role.decorator"
 import { LoginGuard } from "@/guards/login.guard"
+import { RoleGuard } from "@/guards/role.guard"
 
 @Controller("auth")
 export class AuthController {
@@ -17,14 +18,14 @@ export class AuthController {
         return await this.authService.signup(req, res)
     }
     @Post("login")
-    @Role("user", "admin")
-    @UseGuards(LoginGuard)
+    @Role("user-2", "user-1", "admin")
+    @UseGuards(LoginGuard, RoleGuard)
     async login(@Req() req: Request, @Res() res: Response) {
         return await this.authService.login(req, res)
     }
     @Get("logout")
-    @Role("user", "admin")
-    @UseGuards(AccessGuard)
+    @Role("user-2", "admin")
+    @UseGuards(AccessGuard, RoleGuard)
     async logout(@Req() req: Request, @Res() res: Response) {
         return await this.authService.logout(req, res)
     }

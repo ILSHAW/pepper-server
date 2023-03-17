@@ -1,9 +1,17 @@
+import { IsNotEmpty, IsString, IsMongoId } from "class-validator"
 import { InjectModel } from "@nestjs/mongoose"
 import { Injectable } from "@nestjs/common"
 import { Request, Response } from "express"
 
 import { ExceptionService } from "@/services/exception.service"
 import { IUserModel } from "../models/user.model"
+
+export class PromoteDTO {
+	@IsMongoId({ message: "User id format is invalid" })
+	@IsString({ message: "User id must be a string" })
+	@IsNotEmpty({ message: "User id is required" })
+	id: string
+}
 
 @Injectable()
 export class UserService {
@@ -38,5 +46,22 @@ export class UserService {
 			login: user.login,
 			role: user.role
 		}))})
+	}
+	async promote(req: Request, res: Response, body: PromoteDTO) {
+		const user = await this.userModel.findById(body.id)
+
+		if(user) {
+			if(user.role === "user-2") {
+				await user.updateOne({ role: "user-1" })
+
+				return res.status(200).send({ status: 200, message: "User successfully promoted" })
+			}
+			else {
+				throw this.exceptionService.badRequest("This user cannot be promoted")
+			}
+		}
+		else {
+			throw this.exceptionService.notFound("User not found")
+		}
 	}
 }

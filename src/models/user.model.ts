@@ -15,5 +15,5 @@ export interface IUserModel extends Model<IUserDocument> {
 export const UserSchema = new Schema<IUserDocument>({
     login: { type: Schema.Types.String },
     password: { type: Schema.Types.String },
-    role: { type: Schema.Types.String, default: "user" }
+    role: { type: Schema.Types.String, default: "user-2" }
 })
