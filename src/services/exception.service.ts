@@ -2,6 +2,7 @@ import { ValidationError } from "class-validator"
 import { Injectable } from "@nestjs/common"
 
 import { InternalServerErrorException } from "@/exceptions/internal.exception"
+import { UnprocessableException } from "@/exceptions/unprocessable.exception"
 import { UnauthorizedException } from "@/exceptions/unauthorized.exception"
 import { BadRequestException } from "@/exceptions/badrequest.exception"
 import { ValidationException } from "@/exceptions/validation.exception"
@@ -28,6 +29,9 @@ export class ExceptionService {
     }
     notFound(message: string) {
         return new NotFoundException(message)
+    }
+    unprocessable(message: string) {
+        return new UnprocessableException(message)
     }
     validation(error: ValidationError) {
         return new ValidationException(error)
