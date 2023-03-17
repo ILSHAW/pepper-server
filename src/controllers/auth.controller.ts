@@ -1,7 +1,7 @@
-import { Controller, Post, Req, Res, Get, UseGuards } from "@nestjs/common"
+import { Controller, Post, Req, Res, Get, UseGuards, Body } from "@nestjs/common"
 import { Request, Response } from "express"
 
-import { AuthService } from "@/services/auth.service"
+import { AuthService, SignupDTO } from "@/services/auth.service"
 import { AccessGuard } from "@/guards/access.guard"
 import { SignupGuard } from "@/guards/signup.guard"
 import { Role } from "@/decorators/role.decorator"
@@ -14,8 +14,8 @@ export class AuthController {
 
     @Post("signup")
     @UseGuards(SignupGuard)
-    async signup(@Req() req: Request, @Res() res: Response) {
-        return await this.authService.signup(req, res)
+    async signup(@Req() req: Request, @Res() res: Response, @Body() body: SignupDTO) {
+        return await this.authService.signup(req, res, body)
     }
     @Post("login")
     @Role("user-2", "user-1", "admin")

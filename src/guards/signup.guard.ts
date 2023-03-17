@@ -20,10 +20,30 @@ class SignupDTO {
     @IsString({ message: "Password must be a string" })
     @IsNotEmpty({ message: "Password is required" })
     password: string
+    @IsString({ message: "Name must be a string" })
+    @IsNotEmpty({ message: "Name is required" })
+    name: string
+    @IsString({ message: "Surname must be a string" })
+    @IsNotEmpty({ message: "Surname is required" })
+    surname: string
+    @IsString({ message: "Father name must be a string" })
+    @IsNotEmpty({ message: "Father name is required" })
+    fathername: string
+    @IsString({ message: "Department must be a string" })
+    @IsNotEmpty({ message: "Department is required" })
+    department: string
+    @IsString({ message: "Job must be a string" })
+    @IsNotEmpty({ message: "Job is required" })
+    job: string
 
     constructor(data: SignupDTO) {
         this.login = data.login
         this.password = data.password
+        this.name = data.name
+        this.surname = data.surname
+        this.fathername = data.fathername
+        this.department = data.department
+        this.job = data.job
     }
 }
 
