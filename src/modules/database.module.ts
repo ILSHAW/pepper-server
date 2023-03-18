@@ -3,7 +3,9 @@ import { ConfigService } from "@nestjs/config"
 import { Module } from "@nestjs/common"
 
 import { ConfigModule } from "@/modules/config.module"
+import { MessageSchema } from "@/models/message.model"
 import { UserSchema } from "@/models/user.model"
+import { RoomSchema } from "@/models/room.model"
 
 const databaseModule = MongooseModule.forRootAsync({
     imports: [ConfigModule],
@@ -14,6 +16,12 @@ const databaseModule = MongooseModule.forRootAsync({
 })
 const userDatabaseModule = MongooseModule.forFeature([
     { name: "USER", schema: UserSchema }
+])
+const messageDatabaseModule = MongooseModule.forFeature([
+    { name: "MESSAGE", schema: MessageSchema }
+])
+const roomDatabaseModule = MongooseModule.forFeature([
+    { name: "ROOM", schema: RoomSchema }
 ])
 
 @Module({
@@ -27,3 +35,15 @@ export class DatabaseModule {}
     exports: [userDatabaseModule]
 })
 export class UserDatabaseModule {}
+
+@Module({
+    imports: [messageDatabaseModule],
+    exports: [messageDatabaseModule]
+})
+export class MessageDatabaseModule {}
+
+@Module({
+    imports: [roomDatabaseModule],
+    exports: [roomDatabaseModule]
+})
+export class RoomDatabaseModule {}

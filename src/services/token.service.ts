@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common"
 import { Request, Response } from "express"
 import * as jwt from "jsonwebtoken"
 
-
 @Injectable()
 export class TokenService {
 	constructor(private readonly config: ConfigService) {}
