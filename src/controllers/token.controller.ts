@@ -12,13 +12,13 @@ export class TokenController {
     constructor(private readonly tokenService: TokenService) {}
 
     @Get("check")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async check(@Req() req: Request, @Res() res: Response) {
         return await this.tokenService.check(req, res)
     }
     @Get("refresh")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(RefreshGuard, RoleGuard)
     async refresh(@Req() req: Request, @Res() res: Response) {
         return await this.tokenService.refresh(req, res)

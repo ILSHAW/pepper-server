@@ -13,37 +13,37 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get("")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async get(@Req() req: Request, @Res() res: Response) {
         return await this.userService.get(req, res)
     }
     @Get("all")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async all(@Req() req: Request, @Res() res: Response) {
         return await this.userService.all(req, res)
     }
     @Get(":id")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async id(@Req() req: Request, @Res() res: Response, @Param(ValidationPipe) params: IdDTO) {
         return await this.userService.id(req, res, params)
     }
     @Post("promote")
-    @Role("admin")
+    @Role(0)
     @UseGuards(AccessGuard, RoleGuard)
     async promote(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: PromoteDTO) {
         return await this.userService.promote(req, res, body)
     }
     @Post("forgot")
-    @Role("user-1", "user-2", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async forgot(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: ForgotDTO) {
         return await this.userService.forgot(req, res, body)
     }
     @Patch("forgot")
-    @Role("user-1", "user-2", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, ResetGuard, RoleGuard)
     async reset(@Req() req: Request, @Res() res: Response, @Body() body: ResetDTO) {
         return await this.userService.reset(req, res, body)
