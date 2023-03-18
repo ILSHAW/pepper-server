@@ -31,7 +31,7 @@ export class UserService {
 		}})
 	}
 	async id(req: Request, res: Response, params: IdDTO) {
-		const user = await this.userModel.findOne({ _id: params.id })
+		const user = await this.userModel.findById(params.id)
 
 		if(user) {
 			return res.status(200).send({ status: 200, message: "There is information about user", user: {
