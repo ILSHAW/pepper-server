@@ -27,7 +27,12 @@ export class UserService {
 		return res.status(200).send({ status: 200, message: "There is information about user", user: {
 			id: req.user.id,
 			login: req.user.login,
-			role: req.user.role
+			role: req.user.role,
+			name: req.user.name,
+			surname: req.user.surname,
+			fathername: req.user.fathername,
+			department: req.user.department,
+			job: req.user.job
 		}})
 	}
 	async id(req: Request, res: Response, params: IdDTO) {
@@ -37,7 +42,12 @@ export class UserService {
 			return res.status(200).send({ status: 200, message: "There is information about user", user: {
 				id: user.id,
 				login: user.login,
-				role: user.role
+				role: user.role,
+				name: user.name,
+				surname: user.surname,
+				fathername: user.fathername,
+				department: user.department,
+				job: user.job
 			}})
 		}
 		else {
@@ -50,7 +60,12 @@ export class UserService {
 		return res.status(200).send({ status: 200, message: "There is information about user", user: users.map((user) => ({
 			id: user.id,
 			login: user.login,
-			role: user.role
+			role: user.role,
+			name: user.name,
+			surname: user.surname,
+			fathername: user.fathername,
+			department: user.department,
+			job: user.job
 		}))})
 	}
 	async promote(req: Request, res: Response, body: PromoteDTO) {
