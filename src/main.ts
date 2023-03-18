@@ -4,7 +4,6 @@ import * as cookies from "cookie-parser"
 import { Logger } from "@nestjs/common"
 
 import { EverythingExceptionFilter } from "@/filters/everything.exception.filter"
-import { WebsocketExceptionFilter } from "@/filters/websocket.exception.filter"
 import { AppModule } from "@/modules/app.module"
 
 async function bootstrap() {
