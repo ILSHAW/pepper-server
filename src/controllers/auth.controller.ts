@@ -13,7 +13,8 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post("signup")
-    @UseGuards(SignupGuard)
+    @Role("admin")
+    @UseGuards(AccessGuard, RoleGuard, SignupGuard)
     async signup(@Req() req: Request, @Res() res: Response, @Body() body: SignupDTO) {
         return await this.authService.signup(req, res, body)
     }
