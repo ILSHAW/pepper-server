@@ -14,6 +14,12 @@ export class AvatarIdDTO {
 	@IsNotEmpty({ message: "User id is required" })
 	id: string
 }
+export class ChangeDTO {
+	@IsMongoId({ message: "User id format is invalid" })
+	@IsString({ message: "User id must be a string" })
+	@IsNotEmpty({ message: "User id is required" })
+	id: string
+}
 
 @Injectable()
 export class AvatarService {
@@ -51,6 +57,24 @@ export class AvatarService {
 			}
 			catch(e: any) {
 				return res.sendFile("public/images/avatars/default.png")
+			}
+		}
+		else {
+			throw this.exceptionService.notFound("User not found")
+		}
+	}
+	async change(req: Request, res: Response, body: ChangeDTO, files: Array<Express.Multer.File>) {
+		const user = await this.userModel.findById(body.id)
+
+		if(user) {
+			try {
+				await fs.writeFile(path.resolve(`public/images/avatars/${user.id}${path.extname(files[0].originalname)}`), files[0].buffer)
+				await user.updateOne({ avatar: `${user.id}${path.extname(files[0].originalname)}` })
+	
+				return res.status(201).send({ status: 201, message: "Avatar successfully uploaded" })
+			}
+			catch(e: any) {
+				throw this.exceptionService.badRequest("Failed to upload avatar")
 			}
 		}
 		else {

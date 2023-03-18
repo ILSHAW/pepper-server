@@ -1,8 +1,8 @@
-import { Controller, Req, Res, Get, UseGuards, Post, UseInterceptors, UploadedFiles, Param } from "@nestjs/common"
+import { Controller, Req, Res, Get, UseGuards, Post, UseInterceptors, UploadedFiles, Param, Body } from "@nestjs/common"
 import { FilesInterceptor } from "@nestjs/platform-express"
 import { Request, Response } from "express"
 
-import { AvatarIdDTO, AvatarService } from "@/services/avatar.service"
+import { AvatarIdDTO, AvatarService, ChangeDTO } from "@/services/avatar.service"
 import { ValidationPipe } from "@/pipes/validation.pipe"
 import { FileCountPipe } from "@/pipes/filecount.pipe"
 import { FileTypePipe } from "@/pipes/filetype.pipe"
@@ -33,5 +33,12 @@ export class AvatarController {
     @UseGuards(AccessGuard, RoleGuard)
     async avatarid(@Req() req: Request, @Res() res: Response, @Param(ValidationPipe) params: AvatarIdDTO) {
         return await this.avatarService.avatarid(req, res, params)
+    }
+    @Post("change")
+    @Role("admin")
+    @UseGuards(AccessGuard, RoleGuard)
+    @UseInterceptors(FilesInterceptor("avatar"))
+    async change(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: ChangeDTO, @UploadedFiles(new FileCountPipe(1), new FileSizePipe(20*1024*1024), new FileTypePipe("image/png", "image/jpeg")) files: Array<Express.Multer.File>) {
+        return await this.avatarService.change(req, res, body, files)
     }
 }
