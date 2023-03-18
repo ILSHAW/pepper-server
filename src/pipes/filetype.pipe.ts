@@ -12,7 +12,7 @@ export class FileTypePipe implements PipeTransform {
     }
     
     transform(value: Array<Express.Multer.File>) {
-        return value.map((file) => {
+        return value?.map((file) => {
             if(this.mimetypes.includes(file.mimetype)) {
                 return file
             }

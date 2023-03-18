@@ -16,26 +16,26 @@ export class AvatarController {
     constructor(private readonly avatarService: AvatarService) {}
 
     @Post("")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     @UseInterceptors(FilesInterceptor("avatar"))
     async upload(@Req() req: Request, @Res() res: Response, @UploadedFiles(new FileCountPipe(1), new FileSizePipe(20*1024*1024), new FileTypePipe("image/png", "image/jpeg")) files: Array<Express.Multer.File>) {
         return await this.avatarService.upload(req, res, files)
     }
     @Get("")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async avatar(@Req() req: Request, @Res() res: Response) {
         return await this.avatarService.avatar(req, res)
     }
     @Get(":id")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async avatarid(@Req() req: Request, @Res() res: Response, @Param(ValidationPipe) params: AvatarIdDTO) {
         return await this.avatarService.avatarid(req, res, params)
     }
     @Post("change")
-    @Role("admin")
+    @Role(0)
     @UseGuards(AccessGuard, RoleGuard)
     @UseInterceptors(FilesInterceptor("avatar"))
     async change(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: ChangeDTO, @UploadedFiles(new FileCountPipe(1), new FileSizePipe(20*1024*1024), new FileTypePipe("image/png", "image/jpeg")) files: Array<Express.Multer.File>) {

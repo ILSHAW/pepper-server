@@ -5,11 +5,11 @@ import { DatabaseModule } from "@/modules/database.module"
 import { MailerModule } from "@/modules/mailer.module"
 import { ConfigModule } from "@/modules/config.module"
 import { AvatarModule } from "@/modules/avatar.module"
-import { StaticModule } from "@/modules/static.module"
 import { TokenModule } from "@/modules/token.module"
 import { AuthModule } from "@/modules/auth.module"
 import { UserModule } from "@/modules/user.module"
 import { RoomModule } from "@/modules/room.module"
+import { FileModule } from "@/modules/file.module"
 
 @Module({
 	imports: [
@@ -19,10 +19,10 @@ import { RoomModule } from "@/modules/room.module"
 		TokenModule,
 		UserModule,
 		AvatarModule,
-		StaticModule,
 		MailerModule,
 		WebsocketModule,
-		RoomModule
+		RoomModule,
+		FileModule
 	]
 })
 export class AppModule {}

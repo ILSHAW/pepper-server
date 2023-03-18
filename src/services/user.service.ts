@@ -54,16 +54,21 @@ export class UserService {
 		const user = await this.userModel.findById(params.id)
 
 		if(user) {
-			return res.status(200).send({ status: 200, message: "There is information about user", user: {
-				id: user.id,
-				login: user.login,
-				role: user.role,
-				name: user.name,
-				surname: user.surname,
-				fathername: user.fathername,
-				department: user.department,
-				job: user.job
-			}})
+			if(req.user.role <= user.role) {
+				return res.status(200).send({ status: 200, message: "There is information about user", user: {
+					id: user.id,
+					login: user.login,
+					role: user.role,
+					name: user.name,
+					surname: user.surname,
+					fathername: user.fathername,
+					department: user.department,
+					job: user.job
+				}})
+			}
+			else {
+				throw this.exceptionService.forbidden("Access denied")
+			}
 		}
 		else {
 			throw this.exceptionService.notFound("User not found")
@@ -87,8 +92,8 @@ export class UserService {
 		const user = await this.userModel.findById(body.id)
 
 		if(user) {
-			if(user.role === "user-2") {
-				await user.updateOne({ role: "user-1" })
+			if(user.role === 2) {
+				await user.updateOne({ role: 1 })
 
 				return res.status(200).send({ status: 200, message: "User successfully promoted" })
 			}

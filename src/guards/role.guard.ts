@@ -9,7 +9,7 @@ export class RoleGuard implements CanActivate {
     constructor(private readonly exceptionService: ExceptionService, private readonly reflector: Reflector) {}
 
     canActivate(context: ExecutionContext) {
-        const roles = this.reflector.get<Array<string>>("roles", context.getHandler())
+        const roles = this.reflector.get<Array<number>>("roles", context.getHandler())
         const req = context.switchToHttp().getRequest<Request>()
 
         if(roles.includes(req.user.role)) {

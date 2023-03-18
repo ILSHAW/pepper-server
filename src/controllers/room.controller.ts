@@ -12,13 +12,13 @@ export class RoomController {
     constructor(private readonly roomService: RoomService) {}
 
     @Post("")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async create(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: CreateDTO) {
         return await this.roomService.create(req, res, body)
     }
     @Get("")
-    @Role("user-2", "user-1", "admin")
+    @Role(2, 1, 0)
     @UseGuards(AccessGuard, RoleGuard)
     async get(@Req() req: Request, @Res() res: Response) {
         return await this.roomService.get(req, res)

@@ -9,7 +9,7 @@ export class FileCountPipe implements PipeTransform {
     constructor(private readonly count: number) {}
     
     transform(value: Array<Express.Multer.File>) {
-        if(value.length === this.count) {
+        if(value?.length <= this.count || value === undefined) {
             return value
         }
         else {

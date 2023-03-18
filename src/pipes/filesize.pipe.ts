@@ -9,7 +9,7 @@ export class FileSizePipe implements PipeTransform {
     constructor(private readonly size: number) {}
     
     transform(value: Array<Express.Multer.File>) {
-        return value.map((file) => {
+        return value?.map((file) => {
             if(file.size < this.size) {
                 return file
             }

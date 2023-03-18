@@ -11,6 +11,7 @@ class RequestMessage {
     room: string
     author: string
     message: string
+    attachments: string[]
 }
 
 @WebSocketGateway({
@@ -32,7 +33,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         const message = await this.messageModel.create({
             author: data.author,
             message: data.message,
-            timestamp: new Date().getTime()
+            timestamp: new Date().getTime(),
+            attachments: data.attachments
         })
 
         await this.roomModel.updateOne({ _id: data.room }, { $push: { messages: message.id } })
@@ -40,7 +42,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.server.to([data.room, client.id]).emit("message", { status: "OK", message: {
             author: message.author,
             message: message.message,
-            timestamp: message.timestamp
+            timestamp: message.timestamp,
+            attachments: message.attachments
         }})
     }
 
