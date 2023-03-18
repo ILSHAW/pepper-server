@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common"
 
 import { DatabaseModule } from "@/modules/database.module"
+import { MailerModule } from "@/modules/mailer.module"
 import { ConfigModule } from "@/modules/config.module"
 import { AvatarModule } from "@/modules/avatar.module"
 import { StaticModule } from "@/modules/static.module"
@@ -16,7 +17,8 @@ import { UserModule } from "@/modules/user.module"
 		TokenModule,
 		UserModule,
 		AvatarModule,
-		StaticModule
+		StaticModule,
+		MailerModule
 	]
 })
 export class AppModule {}
