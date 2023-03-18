@@ -10,6 +10,7 @@ export interface IUser {
     fathername: string
     department: string
     job: string
+    rooms: Array<Schema.Types.ObjectId>
 }
 export interface IUserDocument extends IUser, Document {
     
@@ -27,5 +28,6 @@ export const UserSchema = new Schema<IUserDocument>({
     surname: { type: Schema.Types.String },
     fathername: { type: Schema.Types.String },
     department: { type: Schema.Types.String },
-    job: { type: Schema.Types.String }
+    job: { type: Schema.Types.String },
+    rooms: [{ type: Schema.Types.ObjectId, ref: "ROOM" }]
 })

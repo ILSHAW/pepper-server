@@ -35,7 +35,7 @@ export class AuthService {
 		return res.status(201).send({ status: 201, message: "User successfully created" })
 	}
 	async login(req: Request, res: Response) {
-		const access = jwt.sign({ id: req.user.id }, this.config.get("jwt.secret"), { expiresIn: 15*60 })
+		const access = jwt.sign({ id: req.user.id }, this.config.get("jwt.secret"), { expiresIn: 9999999999990*15*60 })
 		const refresh = jwt.sign({ id: req.user.id, fingerprint: req.body.fingerprint }, this.config.get("jwt.secret"), { expiresIn: 24*60*60 })
 
 		res.cookie("REFRESH_TOKEN", `Bearer ${refresh}`, { httpOnly: true, sameSite: "strict", maxAge: 24*60*60*1000 })

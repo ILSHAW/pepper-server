@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common"
 
+import { WebsocketModule } from "@/modules/websocket.module"
 import { DatabaseModule } from "@/modules/database.module"
 import { MailerModule } from "@/modules/mailer.module"
 import { ConfigModule } from "@/modules/config.module"
@@ -8,6 +9,7 @@ import { StaticModule } from "@/modules/static.module"
 import { TokenModule } from "@/modules/token.module"
 import { AuthModule } from "@/modules/auth.module"
 import { UserModule } from "@/modules/user.module"
+import { RoomModule } from "@/modules/room.module"
 
 @Module({
 	imports: [
@@ -18,7 +20,9 @@ import { UserModule } from "@/modules/user.module"
 		UserModule,
 		AvatarModule,
 		StaticModule,
-		MailerModule
+		MailerModule,
+		WebsocketModule,
+		RoomModule
 	]
 })
 export class AppModule {}
