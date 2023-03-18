@@ -1,7 +1,11 @@
-import { IsNotEmpty, IsString, IsMongoId } from "class-validator"
+import { IsNotEmpty, IsString, IsMongoId, IsEmail, Matches, MinLength, MaxLength } from "class-validator"
+import { MailerService } from "@nestjs-modules/mailer"
+import { ConfigService } from "@nestjs/config"
 import { InjectModel } from "@nestjs/mongoose"
 import { Injectable } from "@nestjs/common"
 import { Request, Response } from "express"
+import * as jwt from "jsonwebtoken"
+import * as argon from "argon2"
 
 import { ExceptionService } from "@/services/exception.service"
 import { IUserModel } from "../models/user.model"
@@ -18,10 +22,21 @@ export class IdDTO {
 	@IsNotEmpty({ message: "User id is required" })
 	id: string
 }
+export class ForgotDTO {
+	@Matches(/@gmail\.com$/, { message: "Email domain is invalid" })
+    @IsEmail({}, { message: "Email is invalid" })
+    @IsString({ message: "Email must be a string" })
+    @IsNotEmpty({ message: "Email is required" })
+	email: string
+}
+export class ResetDTO {
+    password: string
+	token: string
+}
 
 @Injectable()
 export class UserService {
-	constructor(@InjectModel("USER") private userModel: IUserModel, private readonly exceptionService: ExceptionService) {}
+	constructor(@InjectModel("USER") private userModel: IUserModel, private readonly config: ConfigService, private readonly exceptionService: ExceptionService, private readonly mailerService: MailerService) {}
 
 	async get(req: Request, res: Response) {
 		return res.status(200).send({ status: 200, message: "There is information about user", user: {
@@ -84,5 +99,24 @@ export class UserService {
 		else {
 			throw this.exceptionService.notFound("User not found")
 		}
+	}
+	async forgot(req: Request, res: Response, body: ForgotDTO) {
+		const token = jwt.sign({ id: req.user.id }, this.config.get("jwt.secret"), { expiresIn: 5*60 })
+
+		await this.mailerService.sendMail({
+            to: body.email,
+            subject: "Reset",
+            template: "./forgot",
+            context: {
+                url: `http://some-frontend-url/forgot?token=${token}`
+            }
+        })
+		
+		return res.status(200).send({ status: 200, message: "A password reset link has been sent to email" })
+	}
+	async reset(req: Request, res: Response, body: ResetDTO) {
+		await req.user.updateOne({ password: await argon.hash(body.password) })
+
+		return res.status(200).send({ status: 200, message: "Password successfully changed" })
 	}
 }

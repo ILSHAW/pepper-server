@@ -1,10 +1,11 @@
-import { Controller, Req, Res, Get, UseGuards, Post, Body, Param } from "@nestjs/common"
+import { Controller, Req, Res, Get, UseGuards, Post, Body, Param, Patch } from "@nestjs/common"
 import { Request, Response } from "express"
 
-import { UserService, PromoteDTO, IdDTO } from "@/services/user.service"
+import { UserService, PromoteDTO, IdDTO, ForgotDTO, ResetDTO } from "@/services/user.service"
 import { ValidationPipe } from "@/pipes/validation.pipe"
 import { AccessGuard } from "@/guards/access.guard"
 import { Role } from "@/decorators/role.decorator"
+import { ResetGuard } from "@/guards/reset.guard"
 import { RoleGuard } from "@/guards/role.guard"
 
 @Controller("user")
@@ -34,5 +35,17 @@ export class UserController {
     @UseGuards(AccessGuard, RoleGuard)
     async promote(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: PromoteDTO) {
         return await this.userService.promote(req, res, body)
+    }
+    @Post("forgot")
+    @Role("user-1", "user-2", "admin")
+    @UseGuards(AccessGuard, RoleGuard)
+    async forgot(@Req() req: Request, @Res() res: Response, @Body(ValidationPipe) body: ForgotDTO) {
+        return await this.userService.forgot(req, res, body)
+    }
+    @Patch("forgot")
+    @Role("user-1", "user-2", "admin")
+    @UseGuards(AccessGuard, ResetGuard, RoleGuard)
+    async reset(@Req() req: Request, @Res() res: Response, @Body() body: ResetDTO) {
+        return await this.userService.reset(req, res, body)
     }
 }
