@@ -6,6 +6,7 @@ import { Request, Response } from "express"
 import { ExceptionService } from "@/services/exception.service"
 import { IUserModel } from "@/models/user.model"
 import { IRoomModel, IRoomDocument } from "@/models/room.model"
+import { IMessageDocument } from "@/models/message.model"
 
 export class CreateDTO {
     @IsArray({ message: "Members must be a array" })
@@ -39,10 +40,13 @@ export class RoomService {
         res.status(201).send({ status: 201, message: "Room successfully created" })
     }
     async get(req: Request, res: Response) {
-        const rooms = await req.user.populate<{ rooms: Array<IRoomDocument> }>("rooms").then((user) => user.rooms.map((room) => ({
+        const user = await req.user.populate<{ rooms: Array<IRoomDocument> }>("rooms")
+        const rooms = await Promise.all(user.rooms.map(async (room) => ({
             id: room.id,
             members: room.members,
-            messages: room.messages
+            messages: await room.populate<{ messages: Array<IMessageDocument> }>("messages").then((room) => room.messages.map((message) => ({
+                id: message.id
+            })))
         })))
 
         res.send({ status: 200, message: "There is information about all user rooms", rooms })
