@@ -27,6 +27,7 @@ export class AvatarService {
 
 	async upload(req: Request, res: Response, files: Array<Express.Multer.File>) {
 		try {
+			console.log(path.resolve(`public/images/avatars/${req.user.id}${path.extname(files[0].originalname)}`))
 			await fs.writeFile(path.resolve(`public/images/avatars/${req.user.id}${path.extname(files[0].originalname)}`), files[0].buffer)
 			await req.user.updateOne({ avatar: `${req.user.id}${path.extname(files[0].originalname)}` })
 
@@ -43,7 +44,7 @@ export class AvatarService {
 			return res.sendFile(path.resolve(`public/images/avatars/${req.user.avatar}`))
 		}
 		catch(e: any) {
-			return res.sendFile("public/images/avatars/default.png")
+			return res.sendFile("public/images/avatars/default.jpg")
 		}
 	}
 	async avatarid(req: Request, res: Response, params: AvatarIdDTO) {
