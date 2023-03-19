@@ -14,7 +14,7 @@ async function bootstrap() {
 	const config = app.get(ConfigService)
 	const logger = new Logger("SERVER")
 
-	app.useGlobalFilters(new EverythingExceptionFilter(), new HttpExceptionFilter(), new NotFoundExceptionFilter(), new WebsocketExceptionsFilter())
+	app.useGlobalFilters(new EverythingExceptionFilter(), new HttpExceptionFilter(), new NotFoundExceptionFilter())
 	app.use(cookies())
 
 	await app.listen(config.get("app.port"), () => logger.log(`Server is running on port ${config.get("app.port")}`))
