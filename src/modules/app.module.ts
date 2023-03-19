@@ -1,5 +1,6 @@
-import { Module } from "@nestjs/common"
+import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common"
 
+import { HttpLoggerMiddleware } from "@/middlewares/http.logger.middleware"
 import { WebsocketModule } from "@/modules/websocket.module"
 import { DatabaseModule } from "@/modules/database.module"
 import { MailerModule } from "@/modules/mailer.module"
@@ -25,4 +26,8 @@ import { FileModule } from "@/modules/file.module"
 		FileModule
 	]
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(HttpLoggerMiddleware).forRoutes("*")
+    }
+}

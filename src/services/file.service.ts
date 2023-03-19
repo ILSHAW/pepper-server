@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common"
 import { Request, Response } from "express"
 import { randomBytes } from "crypto"
 import * as fs from "fs/promises"
-import * as f from "fs"
 import * as path from "path"
 
 import { ExceptionService } from "@/services/exception.service"
@@ -29,7 +28,7 @@ export class FileService {
 			await Promise.all(files.map(async (file) => {
 				const ext = path.extname(file.originalname)
 				const name = randomBytes(20).toString("hex")
-				console.log(file.mimetype)
+
 				if(file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
 					await fs.writeFile(path.resolve(`public/images/${name}${ext}`), file.buffer)
 					paths.push(`images/${name}${ext}`)
