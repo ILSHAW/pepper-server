@@ -45,7 +45,11 @@ export class RoomService {
             id: room.id,
             members: room.members,
             messages: await room.populate<{ messages: Array<IMessageDocument> }>("messages").then((room) => room.messages.map((message) => ({
-                id: message.id
+                id: message.id,
+                message: message.message,
+                author: message.author,
+                timestamp: message.timestamp,
+                attachments: message.attachments
             })))
         })))
 
