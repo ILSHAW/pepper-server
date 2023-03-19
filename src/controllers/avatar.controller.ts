@@ -22,15 +22,15 @@ export class AvatarController {
     async upload(@Req() req: Request, @Res() res: Response, @UploadedFiles(new FileCountPipe(1), new FileSizePipe(20*1024*1024), new FileTypePipe("image/png", "image/jpeg")) files: Array<Express.Multer.File>) {
         return await this.avatarService.upload(req, res, files)
     }
-    @Get("")
-    @Role(2, 1, 0)
-    @UseGuards(AccessGuard, RoleGuard)
-    async avatar(@Req() req: Request, @Res() res: Response) {
-        return await this.avatarService.avatar(req, res)
-    }
+    // @Get("")
+    // @Role(2, 1, 0)
+    // @UseGuards(AccessGuard, RoleGuard)
+    // async avatar(@Req() req: Request, @Res() res: Response) {
+    //     return await this.avatarService.avatar(req, res)
+    // }
     @Get(":id")
-    @Role(2, 1, 0)
-    @UseGuards(AccessGuard, RoleGuard)
+    //@Role(2, 1, 0)
+    //@UseGuards(AccessGuard, RoleGuard)
     async avatarid(@Req() req: Request, @Res() res: Response, @Param(ValidationPipe) params: AvatarIdDTO) {
         return await this.avatarService.avatarid(req, res, params)
     }
