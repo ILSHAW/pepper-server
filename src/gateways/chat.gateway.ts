@@ -59,16 +59,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
     @UseFilters(new WebsocketExceptionsFilter())
     async handleConnection(client: Socket) {
-        const payload = jwt.decode(client.request.headers?.authorization?.match(/(?:[\w-]*\.){2}[\w-]*$/)[0]) as { id: string }
-        const user = await this.userModel.findById(payload.id)
+        try {
+            const payload = jwt.decode(client.request.headers?.authorization?.match(/(?:[\w-]*\.){2}[\w-]*$/)[0]) as { id: string }
+            const user = await this.userModel.findById(payload.id)
         
-        if(user) {
             await client.join(user.rooms.map((id) => String(id)))
 
             this.server.to(client.id).emit("connected", { status: "OK" })
         }
-        else {
-            throw new WsException("User not found")
+        catch(e: any) {
+            this.server.to(client.id).emit("error", { status: "Error", message: "Unauthorized" })
         }
     }
 }
