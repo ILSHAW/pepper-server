@@ -22,8 +22,8 @@ export class FileController {
         return await this.fileService.upload(req, res, files)
     }
     @Get("")
-    @Role(2, 1, 0)
-    @UseGuards(AccessGuard, RoleGuard)
+    //@Role(2, 1, 0)
+    //@UseGuards(AccessGuard, RoleGuard)
     async download(@Req() req: Request, @Res() res: Response, @Query() query: DownloadDTO) {
         return await this.fileService.download(req, res, query)
     }
