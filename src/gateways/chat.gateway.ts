@@ -1,5 +1,6 @@
 import { WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, ConnectedSocket, MessageBody } from "@nestjs/websockets"
 import { InjectModel } from "@nestjs/mongoose"
+import { WsException } from "@nestjs/websockets"
 import { Server, Socket } from "socket.io"
 import * as jwt from "jsonwebtoken"
 
@@ -57,8 +58,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         const payload = jwt.decode(client.request.headers?.authorization?.match(/(?:[\w-]*\.){2}[\w-]*$/)[0]) as { id: string }
         const user = await this.userModel.findById(payload.id)
         
-        await client.join(user.rooms.map((id) => String(id)))
+        if(user) {
+            await client.join(user.rooms.map((id) => String(id)))
 
-        this.server.to(client.id).emit("connected", { status: "OK" })
+            this.server.to(client.id).emit("connected", { status: "OK" })
+        }
+        else {
+            throw new WsException("User not found")
+        }
     }
 }
