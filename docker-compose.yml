@@ -9,7 +9,7 @@ services:
     environment:
       - DATABASE_HOST=mongodb
   mongodb:
-    image: mongo:latest
+    image: mongo:4.4.19
     ports: 
       - 8181:27017
     volumes: 
